@@ -13,6 +13,9 @@ import {
   WalletDropdown,
   WalletDropdownDisconnect,
 } from "@coinbase/onchainkit/wallet";
+// import { Player } from "./components/Player";
+import { Footer } from "./components/Footer";
+
 export default function App() {
   return (
     <div className="flex flex-col min-h-screen font-sans text-[var(--app-foreground)] mini-app-theme from-[var(--app-background)] to-[var(--app-gray)]">
@@ -38,9 +41,13 @@ export default function App() {
           </div>
         </header>
 
-        <main className="flex-1"></main>
+        <main className="flex-1">
+          {/* <Player src={["4bd4k3rn5hv411fo"]} title="Sample Video" /> */}
+        </main>
 
-        <footer className="mt-2 pt-4 flex justify-center"></footer>
+        <footer className="mt-2 pt-4 flex justify-center">
+          <Footer />
+        </footer>
       </div>
     </div>
   );
