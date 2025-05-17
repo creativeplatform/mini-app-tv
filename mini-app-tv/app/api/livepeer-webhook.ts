@@ -1,21 +1,32 @@
 import type { NextApiRequest, NextApiResponse } from "next";
+import { redis } from "../../lib/redis";
 
-// In-memory store for demo purposes. Replace with a database in production.
-const videos: any[] = [];
+const VIDEOS_KEY = "videos";
 
-export default function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse,
+) {
   if (req.method === "POST") {
     const event = req.body;
 
-    // Example: Livepeer sends asset info in event.asset
     if (event && event.asset && event.asset.playbackUrl) {
-      // Avoid duplicates
-      if (!videos.find((v) => v.assetId === event.asset.id)) {
-        videos.unshift({
-          assetId: event.asset.id,
-          playbackUrl: event.asset.playbackUrl,
-          type: "hls", // or "video" if it's an mp4
-        });
+      const assetId = event.asset.id;
+      // Check for duplicates
+      const videos = await redis?.lrange(VIDEOS_KEY, 0, -1);
+      const exists = videos?.some(
+        (v) => v && JSON.parse(v).assetId === assetId,
+      );
+
+      if (!exists) {
+        await redis?.lpush(
+          VIDEOS_KEY,
+          JSON.stringify({
+            assetId,
+            playbackUrl: event.asset.playbackUrl,
+            type: "hls",
+          }),
+        );
       }
     }
 
@@ -24,6 +35,3 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     res.status(405).end();
   }
 }
-
-// Export videos for use in other API routes
-export { videos };

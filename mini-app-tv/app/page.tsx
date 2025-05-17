@@ -13,7 +13,7 @@ import {
   WalletDropdown,
   WalletDropdownDisconnect,
 } from "@coinbase/onchainkit/wallet";
-// import { Player } from "./components/Player";
+import { Player } from "./components/Player";
 import { Footer } from "./components/Footer";
 
 export default function App() {
@@ -42,7 +42,18 @@ export default function App() {
         </header>
 
         <main className="flex-1">
-          {/* <Player src={["4bd4k3rn5hv411fo"]} title="Sample Video" /> */}
+          <Player
+            src={[
+              {
+                src: "ipfs://bafybeiaydmxxo3bv56mlh62c5wakcn3bmdohadrpx4swahguqvevny2x6m",
+                type: "video",
+                mime: "video/mp4",
+                width: 1920,
+                height: 1080,
+              },
+            ]}
+            title="Sample Video"
+          />
         </main>
 
         <footer className="mt-2 pt-4 flex justify-center">
